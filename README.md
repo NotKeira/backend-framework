@@ -149,4 +149,5 @@ See `.env.example` for all available options.
 
 ## License
 
-ISC
+Apache License 2.0
+Read the full license in the [LICENSE](LICENSE) file.
