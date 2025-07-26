@@ -1,0 +1,21 @@
+{
+  "name": "@operix/backend",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "packageManager": "pnpm@10.13.1",
+  "devDependencies": {
+    "@types/node": "^24.1.0",
+    "typescript": "^5.8.3"
+  },
+  "dependencies": {
+    "@evotrix/framework": "link:../../.local/share/pnpm/global/5/node_modules/@evotrix/framework",
+    "dotenv": "^17.2.1"
+  }
+}
