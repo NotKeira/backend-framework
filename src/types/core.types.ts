@@ -11,7 +11,7 @@ export interface ILogger {
 
 export interface IService {
   readonly name: string;
-  initialize(): Promise<void>;
+  initialise(): Promise<void>;
   shutdown(): Promise<void>;
   isReady(): boolean;
 }

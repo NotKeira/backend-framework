@@ -6,7 +6,7 @@ export interface IModule {
   readonly name: string;
   readonly version: string;
   readonly dependencies: string[];
-  initialize(): Promise<void>;
+  initialise(): Promise<void>;
   shutdown(): Promise<void>;
   isEnabled(): boolean;
 }
@@ -16,7 +16,7 @@ export interface IModuleManager {
   unregister(moduleName: string): void;
   get(moduleName: string): IModule | undefined;
   getAll(): IModule[];
-  initialize(): Promise<void>;
+  initialise(): Promise<void>;
   shutdown(): Promise<void>;
 }
 
