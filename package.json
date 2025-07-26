@@ -15,7 +15,6 @@
     "typescript": "^5.8.3"
   },
   "dependencies": {
-    "@evotrix/framework": "link:../../.local/share/pnpm/global/5/node_modules/@evotrix/framework",
     "dotenv": "^17.2.1"
   }
 }

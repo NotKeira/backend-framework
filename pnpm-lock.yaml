@@ -11,9 +11,6 @@ importers:
 
   .:
     dependencies:
-      '@evotrix/framework':
-        specifier: link:../../.local/share/pnpm/global/5/node_modules/@evotrix/framework
-        version: link:../../.local/share/pnpm/global/5/node_modules/@evotrix/framework
       dotenv:
         specifier: ^17.2.1
         version: 17.2.1
