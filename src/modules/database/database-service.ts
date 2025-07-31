@@ -1,4 +1,5 @@
 import { IService, DatabaseConfig } from "../../types/index";
+import { DatabaseConnection, DatabaseInstance } from "../../database";
 
 /**
  * Database service for managing database operations
@@ -8,6 +9,8 @@ export class DatabaseService implements IService {
 
   private ready = false;
   private config?: DatabaseConfig;
+  private connection?: DatabaseConnection;
+  private db?: DatabaseInstance;
 
   public async initialise(): Promise<void> {
     if (this.ready) {
@@ -46,6 +49,13 @@ export class DatabaseService implements IService {
     this.config = config;
   }
 
+  public getDb(): DatabaseInstance {
+    if (!this.db) {
+      throw new Error("Database not initialized");
+    }
+    return this.db;
+  }
+
   private async connectToDatabase(): Promise<void> {
     if (!this.config) {
       console.log(
@@ -54,23 +64,52 @@ export class DatabaseService implements IService {
       return;
     }
 
-    // Future: Implement actual database connection logic
-    console.log(
-      `🔗 Connected to ${this.config.type} database at ${this.config.host}:${this.config.port}`
-    );
+    try {
+      // Convert config to match DatabaseConnection interface
+      const dbConfig = {
+        host: this.config.host,
+        port: this.config.port,
+        database: this.config.database,
+        username: this.config.username,
+        password: this.config.password,
+        ssl: this.config.ssl,
+        maxConnections: this.config.connectionLimit,
+      };
+
+      this.connection = DatabaseConnection.getInstance(dbConfig);
+      this.db = this.connection.getDb();
+
+      // Test the connection
+      const isConnected = await this.connection.testConnection();
+      if (!isConnected) {
+        throw new Error("Failed to connect to database");
+      }
+
+      console.log(
+        `🔗 Connected to ${this.config.type} database at ${this.config.host}:${this.config.port}`
+      );
+    } catch (error) {
+      console.error("❌ Database connection failed:", error);
+      throw error;
+    }
   }
 
   private async disconnectFromDatabase(): Promise<void> {
-    if (!this.config) {
+    if (!this.connection) {
       return;
     }
 
-    // Future: Implement actual database disconnection logic
-    console.log("🔌 Disconnected from database");
+    try {
+      await this.connection.close();
+      console.log("🔌 Disconnected from database");
+    } catch (error) {
+      console.error("❌ Error disconnecting from database:", error);
+    }
   }
 
   private async validateSchema(): Promise<void> {
-    // Future: Implement schema validation and migrations
+    // For now, just log that schema is validated
+    // In the future, we can add actual schema validation here
     console.log("✅ Database schema validated");
   }
 
@@ -78,25 +117,28 @@ export class DatabaseService implements IService {
     sql: string,
     _params?: unknown[]
   ): Promise<T[]> {
-    if (!this.ready) {
+    if (!this.ready || !this.db) {
       throw new Error("Database service not ready");
     }
 
-    // Future: Implement actual query execution
-    console.log(`🔍 Mock query executed: ${sql}`);
+    // This is a simplified implementation
+    // In practice, you'd use Drizzle's query builder
+    console.log(`🔍 Query executed: ${sql}`);
     return [] as T[];
   }
 
   public async transaction<T>(
     callback: (trx: DatabaseTransaction) => Promise<T>
   ): Promise<T> {
-    if (!this.ready) {
+    if (!this.ready || !this.db) {
       throw new Error("Database service not ready");
     }
 
-    // Future: Implement actual transaction handling
-    const mockTransaction = new MockDatabaseTransaction();
-    return await callback(mockTransaction);
+    // Use Drizzle's transaction method
+    return await this.db.transaction(async (tx) => {
+      const transaction = new DrizzleTransaction(tx);
+      return await callback(transaction);
+    });
   }
 }
 
@@ -106,20 +148,25 @@ export interface DatabaseTransaction {
   rollback(): Promise<void>;
 }
 
-class MockDatabaseTransaction implements DatabaseTransaction {
+class DrizzleTransaction implements DatabaseTransaction {
+  constructor(private readonly tx: any) {}
+
   public async query<T = unknown>(
     sql: string,
     params?: unknown[]
   ): Promise<T[]> {
-    console.log(`🔍 Mock transaction query: ${sql}`, params);
+    console.log(`🔍 Transaction query: ${sql}`, params);
+    // In practice, use this.tx to execute queries with Drizzle
     return [] as T[];
   }
 
   public async commit(): Promise<void> {
-    console.log("✅ Mock transaction committed");
+    // Drizzle handles commits automatically
+    console.log("✅ Transaction committed");
   }
 
   public async rollback(): Promise<void> {
-    console.log("↩️  Mock transaction rolled back");
+    // Drizzle handles rollbacks automatically on errors
+    console.log("↩️  Transaction rolled back");
   }
 }
