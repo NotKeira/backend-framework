@@ -8,8 +8,8 @@ import {
   uuid,
   varchar,
   pgEnum,
-} from 'drizzle-orm/pg-core';
-import { relations } from 'drizzle-orm';
+} from "drizzle-orm/pg-core";
+import { relations } from "drizzle-orm";
 
 // Enums
 export const userRoleEnum = pgEnum("user_role", ["admin", "staff", "member"]);
@@ -335,6 +335,78 @@ export const analytics = pgTable("analytics", {
   timestamp: timestamp("timestamp").defaultNow().notNull(),
 });
 
+// Public pages for server customization
+export const publicPages = pgTable("public_pages", {
+  id: uuid("id").primaryKey().defaultRandom(),
+  serverId: uuid("server_id")
+    .references(() => servers.id)
+    .notNull(),
+  title: varchar("title", { length: 255 }).notNull(),
+  slug: varchar("slug", { length: 100 }).notNull(),
+  content: text("content"),
+  isPublished: boolean("is_published").default(false).notNull(),
+  metaDescription: text("meta_description"),
+  orderIndex: integer("order_index").default(0).notNull(),
+  createdAt: timestamp("created_at").defaultNow().notNull(),
+  updatedAt: timestamp("updated_at").defaultNow().notNull(),
+});
+
+// User settings and preferences
+export const userSettings = pgTable("user_settings", {
+  id: uuid("id").primaryKey().defaultRandom(),
+  userId: uuid("user_id")
+    .references(() => users.id)
+    .notNull(),
+  serverId: uuid("server_id").references(() => servers.id), // NULL for global settings
+  settings: json("settings").$type<UserPreferences>(),
+  createdAt: timestamp("created_at").defaultNow().notNull(),
+  updatedAt: timestamp("updated_at").defaultNow().notNull(),
+});
+
+// Analytics aggregations for performance
+export const analyticsAggregates = pgTable("analytics_aggregates", {
+  id: uuid("id").primaryKey().defaultRandom(),
+  serverId: uuid("server_id")
+    .references(() => servers.id)
+    .notNull(),
+  metricType: varchar("metric_type", { length: 50 }).notNull(),
+  dimension: varchar("dimension", { length: 50 }).notNull(),
+  periodStart: timestamp("period_start").notNull(),
+  periodEnd: timestamp("period_end").notNull(),
+  value: integer("value").notNull(),
+  metadata: json("metadata").$type<Record<string, any>>(),
+  createdAt: timestamp("created_at").defaultNow().notNull(),
+});
+
+// Custom reports configuration
+export const customReports = pgTable("custom_reports", {
+  id: uuid("id").primaryKey().defaultRandom(),
+  serverId: uuid("server_id")
+    .references(() => servers.id)
+    .notNull(),
+  name: varchar("name", { length: 255 }).notNull(),
+  description: text("description"),
+  config: json("config").$type<ReportConfig>(),
+  schedule: varchar("schedule", { length: 20 }), // 'daily', 'weekly', 'monthly'
+  recipients: json("recipients").$type<string[]>(),
+  isActive: boolean("is_active").default(true).notNull(),
+  createdBy: uuid("created_by").references(() => users.id),
+  createdAt: timestamp("created_at").defaultNow().notNull(),
+});
+
+// Server configuration templates
+export const serverTemplates = pgTable("server_templates", {
+  id: uuid("id").primaryKey().defaultRandom(),
+  serverId: uuid("server_id")
+    .references(() => servers.id)
+    .notNull(),
+  templateType: varchar("template_type", { length: 50 }).notNull(),
+  name: varchar("name", { length: 255 }).notNull(),
+  config: json("config").$type<Record<string, any>>(),
+  isDefault: boolean("is_default").default(false).notNull(),
+  createdAt: timestamp("created_at").defaultNow().notNull(),
+});
+
 // Sessions for custom auth
 export const sessions = pgTable("sessions", {
   id: uuid("id").primaryKey().defaultRandom(),
@@ -365,6 +437,7 @@ export interface ServerSettings {
     unitTracker?: boolean;
     fileManager?: boolean;
     analytics?: boolean;
+    publicPages?: boolean;
   };
   limits?: {
     maxDepartments?: number;
@@ -421,6 +494,46 @@ export interface ApplicationFormSettings {
   assignRole?: string; // Discord role ID
   thankYouMessage?: string;
   redirectUrl?: string;
+}
+
+export interface UserPreferences {
+  theme?: "light" | "dark" | "auto";
+  timezone?: string;
+  language?: string;
+  dashboardLayout?: string[];
+  notifications?: {
+    email?: boolean;
+    discord?: boolean;
+    applicationUpdates?: boolean;
+    rosterChanges?: boolean;
+    trainingReminders?: boolean;
+    systemAlerts?: boolean;
+  };
+  privacy?: {
+    profileVisible?: boolean;
+    contactVisible?: boolean;
+    activityVisible?: boolean;
+  };
+}
+
+export interface ReportConfig {
+  metrics: string[];
+  filters: {
+    dateRange?: {
+      start: string;
+      end: string;
+    };
+    departments?: string[];
+    userRoles?: string[];
+    eventTypes?: string[];
+  };
+  visualization: {
+    type: "chart" | "table" | "summary";
+    chartType?: "line" | "bar" | "pie" | "area";
+    groupBy?: string;
+    sortBy?: string;
+  };
+  format?: "pdf" | "csv" | "json" | "excel";
 }
 
 // Relations
@@ -515,3 +628,53 @@ export const applicationsRelations = relations(applications, ({ one }) => ({
     relationName: "reviewer",
   }),
 }));
+
+// New table relations
+export const publicPagesRelations = relations(publicPages, ({ one }) => ({
+  server: one(servers, {
+    fields: [publicPages.serverId],
+    references: [servers.id],
+  }),
+}));
+
+export const userSettingsRelations = relations(userSettings, ({ one }) => ({
+  user: one(users, {
+    fields: [userSettings.userId],
+    references: [users.id],
+  }),
+  server: one(servers, {
+    fields: [userSettings.serverId],
+    references: [servers.id],
+  }),
+}));
+
+export const analyticsAggregatesRelations = relations(
+  analyticsAggregates,
+  ({ one }) => ({
+    server: one(servers, {
+      fields: [analyticsAggregates.serverId],
+      references: [servers.id],
+    }),
+  })
+);
+
+export const customReportsRelations = relations(customReports, ({ one }) => ({
+  server: one(servers, {
+    fields: [customReports.serverId],
+    references: [servers.id],
+  }),
+  createdBy: one(users, {
+    fields: [customReports.createdBy],
+    references: [users.id],
+  }),
+}));
+
+export const serverTemplatesRelations = relations(
+  serverTemplates,
+  ({ one }) => ({
+    server: one(servers, {
+      fields: [serverTemplates.serverId],
+      references: [servers.id],
+    }),
+  })
+);
