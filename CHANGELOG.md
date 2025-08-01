@@ -5,6 +5,84 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.4.0] - 2025-08-01
+
+### Added
+
+- **Complete OAuth Authentication System**
+
+  - Discord OAuth provider with full API integration
+  - Roblox OAuth provider with user info and avatar retrieval
+  - OAuth configuration types supporting multiple providers
+  - Comprehensive OAuth API routes for authorization and callbacks
+  - CSRF protection with temporary state management and expiration
+  - OAuth provider discovery endpoint for dynamic integration
+
+- **API Routes Module**
+
+  - OAuth authorization endpoint (`/auth/oauth/:provider`)
+  - OAuth callback handling endpoint (`/auth/oauth/:provider/callback`)
+  - OAuth provider listing endpoint (`/auth/providers`)
+  - Health check endpoint (`/health`) for service monitoring
+  - API information endpoint (`/api/info`) with provider status
+  - Secure state management with 15-minute expiration timeouts
+
+- **Enhanced Security Features**
+  - CSRF state parameter validation for OAuth flows
+  - Automatic cleanup of expired OAuth states
+  - Proper error handling for failed OAuth operations
+  - Secure token exchange with real API integrations
+  - Input validation for all OAuth-related requests
+
+### Enhanced
+
+- **OAuth Provider Implementation**
+
+  - Real Discord API integration replacing mock implementations
+  - Complete Roblox OAuth flow with avatar and user data fetching
+  - Proper HTTP client integration with fetch API
+  - Enhanced error handling and API communication
+  - Provider-specific redirect URI configuration support
+
+- **Type Safety & Code Quality**
+  - Added Roblox provider to OAuth configuration types
+  - Fixed abstract class method declarations and implementations
+  - Resolved all TypeScript compilation warnings and errors
+  - Improved lint compliance with optional chaining and template literals
+  - Standardized TODO comment format across all modules
+
+### Technical Improvements
+
+- **Authentication Architecture**
+
+  - Complete OAuth 2.0 authorization code flow implementation
+  - Real token exchange with external OAuth providers
+  - User information retrieval with avatar and profile data
+  - Provider-agnostic authentication interface design
+  - Secure session management without dependency on external session stores
+
+- **Code Organization**
+  - Standardized TODO comment format (`TODO::`) for better tracking
+  - Improved development workflow documentation
+  - Enhanced error messages and debugging information
+  - Better separation of concerns in OAuth handling
+
+### Removed
+
+- **Deprecated Mock Implementations**
+  - Removed GitHub OAuth mock provider (no longer needed)
+  - Removed Google OAuth mock provider (no longer needed)
+  - Cleaned up placeholder OAuth implementations
+  - Focused OAuth support on Discord and Roblox platforms only
+
+### Fixed
+
+- Abstract class method duplication in OAuth provider base class
+- TypeScript compilation errors for Roblox provider configuration
+- Lint warnings for nested template literals and optional chaining
+- OAuth provider method naming consistency issues
+- Missing type definitions for OAuth user provider information
+
 ## [1.3.1] - 2025-08-01
 
 ### Enhanced
@@ -347,6 +425,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Package management setup with pnpm
 - Basic project foundation
 
+[1.4.0]: https://github.com/Operix-Devlopment/operix.backend/compare/v1.3.1...v1.4.0
+[1.3.1]: https://github.com/Operix-Devlopment/operix.backend/compare/v1.3.0...v1.3.1
+[1.3.0]: https://github.com/Operix-Devlopment/operix.backend/compare/v1.2.0...v1.3.0
 [1.2.0]: https://github.com/Operix-Devlopment/operix.backend/compare/v1.1.5...v1.2.0
 [1.1.5]: https://github.com/Operix-Devlopment/operix.backend/compare/v1.1.4...v1.1.5
 [1.1.4]: https://github.com/Operix-Devlopment/operix.backend/compare/v1.1.3...v1.1.4
