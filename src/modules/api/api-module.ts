@@ -54,22 +54,22 @@ export class ApiModule implements IModule {
   }
 
   private async setupHttpServer(): Promise<void> {
-    // Future: Setup actual HTTP server (Express, Fastify, etc.)
+    // TODO:: Setup actual HTTP server (Express, Fastify, etc.)
     console.log("🚀 HTTP server configured");
   }
 
   private async registerRoutes(): Promise<void> {
-    // Future: Register API routes
+    // TODO:: Register API routes
     console.log("🛣️  API routes registered");
   }
 
   private async registerMiddleware(): Promise<void> {
-    // Future: Register middleware (CORS, auth, validation, etc.)
+    // TODO:: Register middleware (CORS, auth, validation, etc.)
     console.log("🔧 API middleware registered");
   }
 
   private async stopHttpServer(): Promise<void> {
-    // Future: Stop HTTP server gracefully
+    // TODO:: Stop HTTP server gracefully
     console.log("🛑 HTTP server stopped");
   }
 }

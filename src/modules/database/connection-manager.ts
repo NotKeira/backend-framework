@@ -86,7 +86,7 @@ export class DatabaseConnection {
       return;
     }
 
-    // Future: Implement actual database connection logic
+    // TODO:: Implement actual database connection logic
     console.log(`🔗 Connecting to ${this.config.type} database...`);
 
     // Simulate connection delay
@@ -101,7 +101,7 @@ export class DatabaseConnection {
       return;
     }
 
-    // Future: Implement actual database disconnection logic
+    // TODO:: Implement actual database disconnection logic
     console.log(`🔌 Disconnecting from ${this.config.type} database...`);
 
     this.connected = false;
@@ -124,7 +124,7 @@ export class DatabaseConnection {
       throw new Error("Database connection not established");
     }
 
-    // Future: Implement actual query execution
+    // TODO:: Implement actual query execution
     console.log(`🔍 Executing query: ${sql}`, params);
     return [] as T[];
   }

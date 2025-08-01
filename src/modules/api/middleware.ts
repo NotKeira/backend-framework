@@ -15,7 +15,7 @@ export class CorsMiddleware implements IMiddleware {
   ): Promise<void> {
     console.log("🌐 CORS middleware executed");
 
-    // Future: Implement actual CORS headers
+    // TODO:: Implement actual CORS headers
     const req = context as any;
     if (req.response) {
       req.response.header(
@@ -72,7 +72,7 @@ export class RateLimitMiddleware implements IMiddleware {
   }
 
   private getClientId(req: any): string {
-    // Future: Extract from actual request object
+    // TODO:: Extract from actual request object
     return req.ip || req.headers?.["x-forwarded-for"] || "unknown";
   }
 
@@ -164,7 +164,7 @@ export class ValidationMiddleware implements IMiddleware {
   }
 
   private validateRequest(body: unknown): boolean {
-    // Future: Implement actual validation logic
+    // TODO:: Implement actual validation logic
     return typeof body === "object" && body !== null;
   }
 }

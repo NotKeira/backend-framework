@@ -41,17 +41,17 @@ export class AuthService implements IService {
   }
 
   private async setupAuthenticationStrategies(): Promise<void> {
-    // Future: Setup JWT, OAuth providers, session management
+    // TODO:: Setup JWT, OAuth providers, session management
     console.log("📝 Authentication strategies configured");
   }
 
   private async cleanupAuthenticationStrategies(): Promise<void> {
-    // Future: Cleanup sessions, close OAuth connections
+    // TODO:: Cleanup sessions, close OAuth connections
     console.log("🧹 Authentication strategies cleaned up");
   }
 
   public async authenticateUser(_token: string): Promise<AuthResult> {
-    // Future: Implement actual authentication logic
+    // TODO:: Implement actual authentication logic
     return {
       success: false,
       user: null,
@@ -60,7 +60,7 @@ export class AuthService implements IService {
   }
 
   public async generateToken(userId: string): Promise<string> {
-    // Future: Implement JWT token generation
+    // TODO:: Implement JWT token generation
     return `mock-token-${userId}`;
   }
 }

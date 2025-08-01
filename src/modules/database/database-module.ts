@@ -52,12 +52,12 @@ export class DatabaseModule implements IModule {
   }
 
   private async setupDatabaseConnections(): Promise<void> {
-    // Future: Setup actual database connections based on config
+    // TODO:: Setup actual database connections based on config
     console.log("📊 Database connections configured");
   }
 
   private async closeDatabaseConnections(): Promise<void> {
-    // Future: Close all active database connections
+    // TODO:: Close all active database connections
     console.log("🔌 Database connections closed");
   }
 }

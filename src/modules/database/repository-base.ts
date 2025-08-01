@@ -55,7 +55,7 @@ export abstract class RepositoryBase<T> {
     )}) VALUES (${placeholders})`;
     await this.databaseService.query(sql, values);
 
-    // Future: Return the created record with generated ID
+    // TODO:: Return the created record with generated ID
     return data as T;
   }
 
@@ -77,7 +77,7 @@ export abstract class RepositoryBase<T> {
     const sql = `DELETE FROM ${this.tableName} WHERE id = ?`;
     await this.databaseService.query(sql, [id]);
 
-    // Future: Return actual affected rows count
+    // TODO:: Return actual affected rows count
     return true;
   }
 

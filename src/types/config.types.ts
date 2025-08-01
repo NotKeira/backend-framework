@@ -37,6 +37,11 @@ export interface OAuthConfig {
       clientSecret: string;
       scope: string[];
     };
+    roblox?: {
+      clientId: string;
+      clientSecret: string;
+      scope: string[];
+    };
   };
   redirectUri: string;
   sessionSecret: string;
