@@ -5,6 +5,70 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.2.0] - 2025-08-01
+
+### Added
+
+- **Training & Certification Management System**
+
+  - Training session scheduling and management with instructor assignment
+  - Certification tracking with validity periods and requirements
+  - Attendance management with registration and completion tracking
+  - Member certification awards and expiration monitoring
+  - Training progress reporting and session analytics
+  - Comprehensive training lifecycle management
+
+- **Live Unit Tracker System**
+
+  - Real-time unit status updates (available, busy, on patrol, on scene, out of service)
+  - Comprehensive dispatcher dashboard with all active units
+  - Location tracking and assignment management
+  - Status change history and audit logging
+  - Automatic cleanup of inactive units
+  - Multi-department unit coordination
+  - Real-time status change notifications
+
+- **CDN File Manager System**
+
+  - Secure file upload with configurable size and type restrictions
+  - Advanced access control (public, private, server-specific visibility)
+  - File expiration and automatic cleanup
+  - Download tracking and usage analytics
+  - File search and metadata management
+  - Thumbnail generation support for images
+  - Custom storage path configuration
+
+- **Enhanced Custom HTTP Server**
+  - Complete HTTP request/response handling without external frameworks
+  - Dynamic route registration and middleware support
+  - Custom authentication middleware integration
+  - CORS and security header management
+  - Static file serving capabilities
+  - Comprehensive error handling and logging
+
+### Enhanced
+
+- **Database Service Integration**
+  - All new services fully integrated with Drizzle ORM
+  - Comprehensive error handling and transaction support
+  - Optimized queries for real-time operations
+  - Enhanced data validation and type safety
+
+### Technical Improvements
+
+- **Service Architecture**
+
+  - Consistent service interface implementation across all modules
+  - Proper dependency injection and lifecycle management
+  - Real-time event notification system for unit tracking
+  - Comprehensive error handling and logging
+
+- **Security Enhancements**
+  - File upload validation and sanitization
+  - Access control enforcement for all file operations
+  - Session-based authentication for real-time features
+  - Input validation across all new services
+
 ## [1.1.5] - 2025-08-01
 
 ### Added
@@ -165,6 +229,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Package management setup with pnpm
 - Basic project foundation
 
+[1.2.0]: https://github.com/Operix-Devlopment/operix.backend/compare/v1.1.5...v1.2.0
 [1.1.5]: https://github.com/Operix-Devlopment/operix.backend/compare/v1.1.4...v1.1.5
 [1.1.4]: https://github.com/Operix-Devlopment/operix.backend/compare/v1.1.3...v1.1.4
 [1.1.3]: https://github.com/Operix-Devlopment/operix.backend/compare/v1.1.2...v1.1.3
