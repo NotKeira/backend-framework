@@ -157,6 +157,8 @@ class DrizzleTransaction implements DatabaseTransaction {
   ): Promise<T[]> {
     console.log(`🔍 Transaction query: ${sql}`, params);
     // In practice, use this.tx to execute queries with Drizzle
+    // Example: return await this.tx.execute(sql, params);
+    console.log('Using transaction:', this.tx);
     return [] as T[];
   }
 

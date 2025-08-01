@@ -428,6 +428,16 @@ export class AnalyticsService {
     endDate: Date,
     eventTypes?: string[]
   ): Promise<ActivityMetric[]> {
+    let whereConditions = [
+      eq(analytics.serverId, serverId),
+      gte(analytics.timestamp, startDate),
+      lte(analytics.timestamp, endDate),
+    ];
+
+    if (eventTypes && eventTypes.length > 0) {
+      whereConditions.push(eq(analytics.eventType, eventTypes[0]!));
+    }
+
     const query = this.db
       .getDb()
       .select({
@@ -437,13 +447,7 @@ export class AnalyticsService {
         metadata: analytics.eventData,
       })
       .from(analytics)
-      .where(
-        and(
-          eq(analytics.serverId, serverId),
-          gte(analytics.timestamp, startDate),
-          lte(analytics.timestamp, endDate)
-        )
-      )
+      .where(and(...whereConditions))
       .groupBy(analytics.eventType, analytics.timestamp)
       .orderBy(desc(analytics.timestamp));
 
@@ -512,54 +516,84 @@ export class AnalyticsService {
     }
 
     if (config.metrics?.includes("applications")) {
-      const startDate = config.filters?.startDate
-        ? new Date(config.filters.startDate)
-        : new Date(Date.now() - 30 * 24 * 60 * 60 * 1000);
-      const endDate = config.filters?.endDate
-        ? new Date(config.filters.endDate)
-        : new Date();
-
-      data.applications = await this.getApplicationMetrics(
-        serverId,
-        startDate,
-        endDate,
-        config.filters?.departmentId
-      );
+      data.applications = await this.generateApplicationsReport(serverId, config);
     }
 
     if (config.metrics?.includes("training")) {
-      const startDate = config.filters?.startDate
-        ? new Date(config.filters.startDate)
-        : new Date(Date.now() - 30 * 24 * 60 * 60 * 1000);
-      const endDate = config.filters?.endDate
-        ? new Date(config.filters.endDate)
-        : new Date();
-
-      data.training = await this.getTrainingMetrics(
-        serverId,
-        startDate,
-        endDate,
-        config.filters?.departmentId
-      );
+      data.training = await this.generateTrainingReport(serverId, config);
     }
 
     if (config.metrics?.includes("activity")) {
-      const startDate = config.filters?.startDate
-        ? new Date(config.filters.startDate)
-        : new Date(Date.now() - 7 * 24 * 60 * 60 * 1000);
-      const endDate = config.filters?.endDate
-        ? new Date(config.filters.endDate)
-        : new Date();
-
-      data.activity = await this.getUserActivityMetrics(
-        serverId,
-        startDate,
-        endDate,
-        config.filters?.eventTypes
-      );
+      data.activity = await this.generateActivityReport(serverId, config);
     }
 
     return data;
+  }
+
+  /**
+   * Generate applications report data
+   */
+  private async generateApplicationsReport(
+    serverId: string,
+    config: ReportConfig
+  ): Promise<Record<string, any>> {
+    const startDate = config.filters?.startDate
+      ? new Date(config.filters.startDate)
+      : new Date(Date.now() - 30 * 24 * 60 * 60 * 1000);
+    const endDate = config.filters?.endDate
+      ? new Date(config.filters.endDate)
+      : new Date();
+
+    return await this.getApplicationMetrics(
+      serverId,
+      startDate,
+      endDate,
+      config.filters?.departmentId
+    );
+  }
+
+  /**
+   * Generate training report data
+   */
+  private async generateTrainingReport(
+    serverId: string,
+    config: ReportConfig
+  ): Promise<Record<string, any>> {
+    const startDate = config.filters?.startDate
+      ? new Date(config.filters.startDate)
+      : new Date(Date.now() - 30 * 24 * 60 * 60 * 1000);
+    const endDate = config.filters?.endDate
+      ? new Date(config.filters.endDate)
+      : new Date();
+
+    return await this.getTrainingMetrics(
+      serverId,
+      startDate,
+      endDate,
+      config.filters?.departmentId
+    );
+  }
+
+  /**
+   * Generate activity report data
+   */
+  private async generateActivityReport(
+    serverId: string,
+    config: ReportConfig
+  ): Promise<Record<string, any>> {
+    const startDate = config.filters?.startDate
+      ? new Date(config.filters.startDate)
+      : new Date(Date.now() - 7 * 24 * 60 * 60 * 1000);
+    const endDate = config.filters?.endDate
+      ? new Date(config.filters.endDate)
+      : new Date();
+
+    return await this.getUserActivityMetrics(
+      serverId,
+      startDate,
+      endDate,
+      config.filters?.eventTypes
+    );
   }
 
   /**

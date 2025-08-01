@@ -124,7 +124,7 @@ export class PublicPagesService {
 
           return {
             ...dept,
-            memberCount: memberCount.count,
+            memberCount: memberCount?.count || 0,
             isRecruiting: false, // Would come from department settings
           };
         })
@@ -135,9 +135,9 @@ export class PublicPagesService {
       return {
         id: serverData.id,
         name: serverData.name,
-        description: serverData.description,
-        memberCount: memberCountResult.count,
-        departmentCount: deptCountResult.count,
+        description: serverData.description ?? undefined,
+        memberCount: memberCountResult?.count || 0,
+        departmentCount: deptCountResult?.count || 0,
         branding: settings?.branding || {},
         features: settings?.features || {},
         departments: departmentsWithCounts,
@@ -159,7 +159,8 @@ export class PublicPagesService {
   ): Promise<any[]> {
     try {
       // Check if department allows public roster viewing
-      const [department] = await this.db.getDb()
+      const [department] = await this.db
+        .getDb()
         .select({ settings: departments.settings })
         .from(departments)
         .where(
@@ -175,7 +176,8 @@ export class PublicPagesService {
       }
 
       // For public viewing, only show basic info
-      const roster = await this.db.getDb()
+      const roster = await this.db
+        .getDb()
         .select({
           id: departmentMembers.id,
           rank: departmentMembers.rank,
@@ -185,7 +187,10 @@ export class PublicPagesService {
           hiredAt: departmentMembers.hiredAt,
         })
         .from(departmentMembers)
-        .innerJoin(serverMembers, eq(departmentMembers.serverMemberId, serverMembers.id))
+        .innerJoin(
+          serverMembers,
+          eq(departmentMembers.serverMemberId, serverMembers.id)
+        )
         .innerJoin(users, eq(serverMembers.userId, users.id))
         .where(
           and(
@@ -211,38 +216,45 @@ export class PublicPagesService {
     try {
       const stats = await Promise.all([
         // Total members across all departments
-        const stats = await Promise.all([
-        // Total members across all departments
-        this.db.getDb()
+        this.db
+          .getDb()
           .select({ count: count() })
           .from(departments)
-          .innerJoin(departmentMembers, eq(departments.id, departmentMembers.departmentId))
-          .where(and(
-            eq(departments.serverId, serverId),
-            eq(departmentMembers.status, 'active')
-          )),
-        
+          .innerJoin(
+            departmentMembers,
+            eq(departments.id, departmentMembers.departmentId)
+          )
+          .where(
+            and(
+              eq(departments.serverId, serverId),
+              eq(departmentMembers.status, "active")
+            )
+          ),
+
         // Active departments
-        this.db.getDb()
+        this.db
+          .getDb()
           .select({ count: count() })
           .from(departments)
-          .where(and(
-            eq(departments.serverId, serverId),
-            eq(departments.isActive, true)
-          )),
-        
+          .where(
+            and(
+              eq(departments.serverId, serverId),
+              eq(departments.isActive, true)
+            )
+          ),
+
         // This month's applications (if public)
-        this.db.getDb()
+        this.db
+          .getDb()
           .select({ count: count() })
           .from(departments)
           .where(eq(departments.serverId, serverId)),
-      ]);,
       ]);
 
       return {
-        totalMembers: stats[0][0].count,
-        activeDepartments: stats[1][0].count,
-        totalDepartments: stats[2][0].count,
+        totalMembers: stats[0][0]?.count || 0,
+        activeDepartments: stats[1][0]?.count || 0,
+        totalDepartments: stats[2][0]?.count || 0,
       };
     } catch (error) {
       console.error("Error getting public server stats:", error);
@@ -255,7 +267,8 @@ export class PublicPagesService {
    */
   async isPublicPagesEnabled(serverId: string): Promise<boolean> {
     try {
-      const [server] = await this.db.getDb()
+      const [server] = await this.db
+        .getDb()
         .select({ settings: servers.settings })
         .from(servers)
         .where(eq(servers.id, serverId))

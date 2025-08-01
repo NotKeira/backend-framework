@@ -665,6 +665,7 @@ export class TrainingService implements IService {
       .where(
         and(
           eq(memberCertifications.isActive, true),
+          eq(certifications.serverId, serverId),
           lte(memberCertifications.expiresAt, expiryDate)
         )
       )
