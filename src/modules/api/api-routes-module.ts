@@ -1,6 +1,7 @@
 import { RouteManager } from "./route-manager";
 import { HttpRequest, HttpResponse } from "./http-server";
 import { OAuthProviders } from "../auth/oauth-providers";
+import { version } from "../../../package.json";
 
 /**
  * API routes module for handling OAuth authentication routes
@@ -170,8 +171,8 @@ export class ApiRoutesModule {
       "/api/info",
       async (_req: HttpRequest, res: HttpResponse) => {
         res.json({
-          name: "Operix Backend API",
-          version: "1.3.1",
+          name: "Backend API",
+          version: version || "unknown",
           endpoints: this.routeManager.getAllRoutes().length,
           oauth_providers: this.oauthProviders.getAvailableProviders(),
         });
