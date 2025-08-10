@@ -1,4 +1,9 @@
 import { IModule } from "../../types/index";
+import { HttpServer } from "./http-server";
+import { RouteManager } from "./route-manager";
+import { ApiRoutesModule } from "./api-routes-module";
+import { OAuthProviders } from "../auth/oauth-providers";
+import { Environment } from "../../config/environment";
 
 /**
  * API module for handling HTTP server and REST endpoints
@@ -10,6 +15,10 @@ export class ApiModule implements IModule {
 
   private enabled = true;
   private initialised = false;
+  private httpServer?: HttpServer;
+  private routeManager?: RouteManager;
+  private apiRoutes?: ApiRoutesModule;
+  private oauthProviders?: OAuthProviders;
 
   public async initialise(): Promise<void> {
     if (this.initialised) {
@@ -18,10 +27,14 @@ export class ApiModule implements IModule {
 
     console.log("🌐 Initialising API Module...");
 
-    // Setup HTTP server, routes, middleware
+    // Setup components
     await this.setupHttpServer();
+    await this.setupOAuthProviders();
     await this.registerRoutes();
     await this.registerMiddleware();
+
+    // Start the server
+    await this.httpServer?.start();
 
     this.initialised = true;
     console.log("✅ API Module initialised");
@@ -54,13 +67,48 @@ export class ApiModule implements IModule {
   }
 
   private async setupHttpServer(): Promise<void> {
-    // TODO:: Setup actual HTTP server (Express, Fastify, etc.)
+    const environment = new Environment();
+    const config = environment.getAppConfig();
+
+    this.httpServer = new HttpServer(config.server);
+    this.routeManager = new RouteManager();
+
     console.log("🚀 HTTP server configured");
   }
 
+  private async setupOAuthProviders(): Promise<void> {
+    const environment = new Environment();
+    const config = environment.getAppConfig();
+
+    if (config.oauth) {
+      this.oauthProviders = new OAuthProviders();
+      this.oauthProviders.configure(config.oauth);
+      console.log("� OAuth providers configured");
+    } else {
+      console.log("⚠️  No OAuth configuration found");
+    }
+  }
+
   private async registerRoutes(): Promise<void> {
-    // TODO:: Register API routes
-    console.log("🛣️  API routes registered");
+    if (!this.routeManager || !this.oauthProviders) {
+      console.log("⚠️  Cannot register routes - missing dependencies");
+      return;
+    }
+
+    // Setup API routes with OAuth
+    this.apiRoutes = new ApiRoutesModule(
+      this.routeManager,
+      this.oauthProviders
+    );
+    this.apiRoutes.registerRoutes();
+
+    // Register routes with HTTP server
+    const allRoutes = this.routeManager.getAllRoutes();
+    for (const route of allRoutes) {
+      this.httpServer?.registerRoute(route.method, route.path, route.handler);
+    }
+
+    console.log(`🛣️  ${allRoutes.length} API routes registered`);
   }
 
   private async registerMiddleware(): Promise<void> {
@@ -69,7 +117,20 @@ export class ApiModule implements IModule {
   }
 
   private async stopHttpServer(): Promise<void> {
-    // TODO:: Stop HTTP server gracefully
+    await this.httpServer?.stop();
     console.log("🛑 HTTP server stopped");
+  }
+
+  // Getter methods for accessing components
+  public getHttpServer(): HttpServer | undefined {
+    return this.httpServer;
+  }
+
+  public getRouteManager(): RouteManager | undefined {
+    return this.routeManager;
+  }
+
+  public getOAuthProviders(): OAuthProviders | undefined {
+    return this.oauthProviders;
   }
 }
