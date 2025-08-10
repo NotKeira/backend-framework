@@ -168,10 +168,10 @@ export class HttpServer {
   }
 
   private createResponse(res: ServerResponse): HttpResponse {
-    return {
+    const response: HttpResponse = {
       status: (code: number) => {
         res.statusCode = code;
-        return this.createResponse(res);
+        return response; // Return the same response object, not a new one
       },
       json: (data: unknown) => {
         res.setHeader("Content-Type", "application/json");
@@ -183,9 +183,10 @@ export class HttpServer {
       },
       header: (name: string, value: string) => {
         res.setHeader(name, value);
-        return this.createResponse(res);
+        return response; // Return the same response object, not a new one
       },
     };
+    return response;
   }
 
   private applyCORSHeaders(response: HttpResponse): void {
@@ -210,7 +211,7 @@ export class HttpServer {
     request: HttpRequest,
     response: HttpResponse
   ): Promise<void> {
-    const routeKey = `${request.method}:${request.pathname}`;
+    const routeKey = `${request.method.toUpperCase()}:${request.pathname}`;
     const handler = this.routes.get(routeKey);
 
     if (handler) {
@@ -225,7 +226,7 @@ export class HttpServer {
         request.params = paramHandler.params;
         await paramHandler.handler(request, response);
       } else {
-        this.sendErrorResponse(response as any, 404, "Not Found");
+        response.status(404).json({ error: "Not Found" });
       }
     }
   }
@@ -236,7 +237,7 @@ export class HttpServer {
   ): { handler: RouteHandler; params: Record<string, string> } | null {
     for (const [routeKey, handler] of this.routes.entries()) {
       const [routeMethod, routePath] = routeKey.split(":");
-      if (routeMethod !== method || !routePath) continue;
+      if (routeMethod !== method.toUpperCase() || !routePath) continue;
 
       const params = this.matchRoute(routePath, pathname);
       if (params) {
