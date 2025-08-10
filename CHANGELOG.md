@@ -5,6 +5,14 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.5.1] - 2025-08-10
+
+### Fixed
+
+- **Legal & Compliance**
+  - Updated copyright notice in LICENSE to include all contributors
+  - Improved legal attribution and contributor recognition
+
 ## [1.5.0] - 2025-08-10
 
 ### Added
@@ -458,6 +466,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Package management setup with pnpm
 - Basic project foundation
 
+[1.5.1]: https://github.com/NotKeira/backend-framework/compare/v1.5.0...v1.5.1
 [1.5.0]: https://github.com/Operix-Devlopment/operix.backend/compare/v1.4.0...v1.5.0
 [1.4.0]: https://github.com/Operix-Devlopment/operix.backend/compare/v1.3.1...v1.4.0
 [1.3.1]: https://github.com/Operix-Devlopment/operix.backend/compare/v1.3.0...v1.3.1
