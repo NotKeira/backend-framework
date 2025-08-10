@@ -5,6 +5,39 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.5.0] - 2025-08-10
+
+### Added
+
+- **Enhanced API Module**
+  - Complete HTTP server implementation with route handling
+  - OAuth provider setup and configuration
+  - Dynamic API version endpoint reading from package.json
+  - Improved application structure with core module registration
+
+### Enhanced
+
+- **Core Application Architecture**
+  - Streamlined codebase by removing example services
+  - Better module organization and registration system
+  - Improved maintainability through cleaner code structure
+  - Enhanced HTTP server functionality with proper route management
+
+### Fixed
+
+- **API Response Handling**
+  - Corrected response handling in HTTP server implementation
+  - Fixed route method case sensitivity issues
+  - Improved error handling and response consistency
+
+### Technical Improvements
+
+- **Code Quality & Structure**
+  - Removed unnecessary example services for cleaner codebase
+  - Enhanced module registration in main entry point
+  - Better separation of concerns in API module
+  - Improved HTTP server reliability and robustness
+
 ## [1.4.0] - 2025-08-01
 
 ### Added
@@ -425,6 +458,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Package management setup with pnpm
 - Basic project foundation
 
+[1.5.0]: https://github.com/Operix-Devlopment/operix.backend/compare/v1.4.0...v1.5.0
 [1.4.0]: https://github.com/Operix-Devlopment/operix.backend/compare/v1.3.1...v1.4.0
 [1.3.1]: https://github.com/Operix-Devlopment/operix.backend/compare/v1.3.0...v1.3.1
 [1.3.0]: https://github.com/Operix-Devlopment/operix.backend/compare/v1.2.0...v1.3.0
