@@ -1,10 +1,18 @@
 import { Application } from "./core/index";
+import { ApiModule } from "./modules/api/api-module";
+import { AuthModule } from "./modules/auth/auth-module";
+import { DatabaseModule } from "./modules/database/database-module";
 
 /**
  * Main entry point for the Operix Backend
  */
 async function main(): Promise<void> {
   const app = new Application();
+
+  // Register core modules
+  app.getModuleManager().register(new DatabaseModule());
+  app.getModuleManager().register(new AuthModule());
+  app.getModuleManager().register(new ApiModule());
 
   // Setup graceful shutdown
   app.setupGracefulShutdown();
