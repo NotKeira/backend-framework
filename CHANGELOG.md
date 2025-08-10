@@ -5,6 +5,22 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.6.0] - 2025-08-10
+
+### Added
+
+- **Development Workflow Improvements**
+  - Added `gp` script to package.json for easier deployment
+  - Automated git push with upstream tracking, tags, and follow-tags options
+  - Streamlined deployment process with single command
+
+### Enhanced
+
+- **Package Management**
+  - Updated packageManager to pnpm@10.14.0 with integrity hash
+  - Improved package manager version specification for better reproducibility
+  - Enhanced dependency management with latest pnpm version
+
 ## [1.5.1] - 2025-08-10
 
 ### Fixed
@@ -466,6 +482,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Package management setup with pnpm
 - Basic project foundation
 
+[1.6.0]: https://github.com/NotKeira/backend-framework/compare/v1.5.1...v1.6.0
 [1.5.1]: https://github.com/NotKeira/backend-framework/compare/v1.5.0...v1.5.1
 [1.5.0]: https://github.com/Operix-Devlopment/operix.backend/compare/v1.4.0...v1.5.0
 [1.4.0]: https://github.com/Operix-Devlopment/operix.backend/compare/v1.3.1...v1.4.0
