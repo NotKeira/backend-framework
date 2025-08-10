@@ -5,6 +5,22 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.6.2] - 2025-08-10
+
+### Fixed
+
+- **Dependencies & Compatibility**
+  - Updated dependencies in package.json for improved compatibility
+  - Upgraded @types/jsonwebtoken from ^9.0.7 to ^9.0.10
+  - Updated @types/node from ^24.1.0 to ^24.2.1
+  - Upgraded @types/pg from ^8.11.10 to ^8.15.5
+  - Updated tsx from ^4.19.2 to ^4.20.3
+  - Upgraded typescript from ^5.8.3 to ^5.9.2
+  - Updated pg from ^8.13.1 to ^8.16.3
+  - Upgraded uuid from ^11.0.3 to ^11.1.0
+  - Updated zod from ^3.23.8 to ^3.25.76
+  - Refreshed pnpm-lock.yaml for consistent dependency resolution
+
 ## [1.6.1] - 2025-08-10
 
 ### Fixed
@@ -491,6 +507,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Package management setup with pnpm
 - Basic project foundation
 
+[1.6.2]: https://github.com/NotKeira/backend-framework/compare/v1.6.1...v1.6.2
 [1.6.1]: https://github.com/NotKeira/backend-framework/compare/v1.6.0...v1.6.1
 [1.6.0]: https://github.com/NotKeira/backend-framework/compare/v1.5.1...v1.6.0
 [1.5.1]: https://github.com/NotKeira/backend-framework/compare/v1.5.0...v1.5.1
